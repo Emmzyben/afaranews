@@ -1,5 +1,38 @@
-body{
+body, html {
     margin: 0;
+    padding: 0;
+}
+#container {
+    width: 200px;
+    height: 200px;
+    border: 2px solid black;
+    border-radius: 50%;
+    position: relative;
+    overflow: hidden;
+}
+
+#color1, #color2 {
+    position: absolute;
+    width: 50%;
+    height: 100%;
+}
+
+#color1 {
+    background-color: #ff1b00; /* Color 1 */
+    left: 0;
+}
+
+#color2 {
+    background-color: #012A6A; /* Color 2 */
+    left: 50%;
+}
+#alert{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    text-align: center;
+    margin: 30px;
 }
 header{
     background-color: #ff1b00;
