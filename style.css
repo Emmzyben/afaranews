@@ -1,6 +1,7 @@
 body, html {
     margin: 0;
     padding: 0;
+    font-family: Arial, Helvetica, sans-serif;
 }
 #container {
     width: 200px;
@@ -47,17 +48,22 @@ header{
     z-index: 1;
     transition: top 1s;     
           }
-  header>div{
-    width:47%;
+  header>.div1{
+    width:30%;
+  }
+  header>.div2{
+   width: 70%;
   }
   header>div>img{
     width:120px;
     height:80px;
-    margin-left: 40px;
+    margin-left: 60px;
+    margin: 10px;
   }
   header>div>ul{
-    margin-top: 30px;
+    margin-top: 40px;
     text-align: right;
+    margin-right: 40px;
   }
   header>div>ul>li{
   display:inline;
@@ -82,7 +88,7 @@ header{
     border-radius: 15px;
   }
   #contactbtn>a{
-    color:white;
+    color:rgb(202, 196, 196);
     text-decoration: none;
   }
   #contactbtn:hover{
@@ -92,7 +98,7 @@ header{
   .nav-container {
     position: relative;
     display: inline-block;
-    color: white;
+    color: rgb(202, 196, 196);
   }
   
   
@@ -211,7 +217,70 @@ header{
             transform: translate(0, -11px) rotate(45deg);
           }
           
-          @media only screen and (max-width: 700px) {
+          footer{
+            display: flex;
+            flex-direction: row;
+            background-color: #000000fa;
+            justify-content: center;
+            color: rgb(202, 196, 196);
+          }
+          footer>div{
+            width:33% ;
+            margin: 20px;
+          }
+          #form{
+            margin-top: 15px;
+          }
+          #form>input{
+            padding: 5px;
+            margin: 5px;
+            border: 1px solid rgb(202, 196, 196);
+            background-color: #000000;
+            border-radius: 7px;
+          }
+          #form>#submit{
+            background-color: #ff1b00;
+            padding: 10px;
+            color: rgb(202, 196, 196);
+            border: none;
+          }
+          #submit{
+            background-color: #ff1b00;
+            padding: 10px;
+            color: rgb(202, 196, 196);
+            border: none;
+            text-decoration: none;
+            border-radius: 7px;
+          }
+          #inbox{
+            padding: 40px;
+            padding-bottom: 60px;
+            text-align: center;
+            background-color: #00EBC7;
+          }
+          #last{
+            display: flex;flex-direction: row;background-color: black;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid rgb(202, 196, 196);
+            padding: 20px;
+          }
+          #last>a{
+            margin: 10px;
+          }
+          #bg{
+            background-image: url(images/logo.png);
+            background-position: center;
+            background-size: cover;
+            background-repeat: no-repeat;
+          }
+          @media only screen and (max-width: 900px) {
+            footer{
+              flex-direction: column;
+            }
+            footer>div{
+              width: auto;
+            }
             header{
                 display: none;
             }
