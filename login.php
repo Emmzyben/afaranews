@@ -1,12 +1,65 @@
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$DATABASE_HOST = 'localhost';
+$DATABASE_USER = 'root';
+$DATABASE_PASS = '';
+$DATABASE_NAME = 'afaranew';
+
+$con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
+if (mysqli_connect_errno()) {
+    exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+}
+
+session_start();
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+
+    $stmt = $con->prepare('SELECT user_id, username, password FROM Users WHERE email = ?');
+    $stmt->bind_param('s', $email);
+    $stmt->execute();
+    $stmt->store_result();
+
+    if ($stmt->num_rows > 0) {
+        $stmt->bind_result($user_id, $username, $hashed_password);
+        $stmt->fetch();
+
+        if (password_verify($password, $hashed_password)) {
+            // Password is correct, so start a new session
+            session_regenerate_id();
+            $_SESSION['loggedin'] = TRUE;
+            $_SESSION['user_id'] = $user_id;
+            $_SESSION['username'] = $username;
+            header('Location: index.html');
+            exit;
+        } else {
+            echo 'Incorrect username and/or password!';
+        }
+    } else {
+        echo 'Incorrect username and/or password!';
+    }
+
+    $stmt->close();
+}
+?>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   
+   <link rel="stylesheet" href="reg.css">
     <link rel="shortcut icon" href="images/logo.jpg">
     <link rel="stylesheet" href="style.css">
+    <style>
+      main{
+        padding-bottom: 170px;
+      }
+    </style>
 </head>
 <body>
   <header id="header">
@@ -25,8 +78,8 @@
               <li><a href="community.html">Community</a></li>
              </ul>
            </li>
-        <li><a href="login.html" >Sign In</a></li>
-        <li><a id="contactbtn" href="signUp.html">Sign Up</a></li>
+        <li><a href="login.php" >Sign In</a></li>
+        <li><a id="contactbtn" href="signUp.php">Sign Up</a></li>
       </ul>
     </div>
   </header>
@@ -66,8 +119,8 @@
                  subMenu.style.display = (subMenu.style.display === 'none' || subMenu.style.display === '') ? 'block' : 'none';
                }
              </script>
-      <a href="login.html" >Sign In</a>
-        <a href="signUp.html">Sign UP</a>
+      <a href="login.php" >Sign In</a>
+        <a href="signUp.php">Sign UP</a>
     </div>
     <script>
     
@@ -91,67 +144,22 @@ function openNav() {
     </script>
 </nav>
     <main>
-        <div id="alert">
-           <div id="container">
-            <div id="color1"></div>
-            <div id="color2"></div>
-        </div> 
-        <div><h2>Website Development in Progress...</h2>
-        <p>Please keep checking</p></div>
-        
-        </div>
-        
-
+   <div id="form">
+<div id="f1"><h2>Sign in</h2></div>
+<div id="f2">
+  <form action="" method="post">
+    <input type="email" name="email" id="" placeholder="Email"><br>
+    <input type="password" name="password" id="" placeholder="Password"><br>
+    <a href="forgotpassword.html">Forgot Password?</a><br>
+    <input type="submit" name="" id="subm" value="Sign In">
+    <p>Not a Member? <a href="signUp.php">Signup now</a></p>
+  </form>
+</div>
+   </div>
     </main>
-    <div id="inbox">
-      <h2>Get the best viral stories straight into your inbox!</h2>
-      <a href="signUp.html" id="submit">SIGN UP NOW!</a>
-    </div>
-
-   <div id="bg">
-    <footer>
-      <div>
-       <h3>ABOUT US</h3> 
-       <hr>
-<p>Afara News and Afara TV are online News medium with unbiased reporting.</p>
-
-<p>Discussions are no hold barred.</p>
-
-<p>You have a right to be heard because we bridge the information divide.</p>
-
-<p>Afaranews is owned by <b>HIBERNATION DIGITAL ACADEMY</b></p>
-
  
-      </div>
-      <div>
-        <h3>FIND US ON FACEBOOK</h3>
-        <hr>
-        <div style="width: 100%;height: 100%;"></div>
-      </div>
-      <div>
-        <h3>ADVERTISE WITH US</h3>
-        <hr>
-        <p>Want to expose your Business to the world?</p>
-         <p>Advertise your business on our platform at reduced price</p>
-         <p>Fill the form to contact us now :</p>
-         <form action="" id="form">
-          <input type="text" name="name" id="" placeholder="Enter Name"><br>
-          <input type="email" name="email" id="" placeholder="Email"><br>
-          <input type="phone" name="phone" id="" placeholder="Phone number"><br>
-          <input type="submit" name="" id="submit">
-         </form>
-      </div>
-     
-    </footer>
-   
-      <div id="last">
-        <a href="#" ><i class="fa fa-facebook-official" style="font-size:24px;color:#ff1b00"></i> </a>
-        <a  href="#" ><i class="fa fa-twitter-square" style="font-size:24px;color:#ff1b00"></i></a>
-        <a  href="#" ><i class="fa fa-instagram" style="font-size:24px;color:#ff1b00"></i></a>
-        <a href="#" ><i class="fa fa-linkedin-square" style="font-size:24px;color:#ff1b00"></i></a>
-     </div>
 
-  </div>
+  
     <script src="script.js"></script>
 </body>
 </html>

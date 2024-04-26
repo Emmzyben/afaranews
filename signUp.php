@@ -1,10 +1,71 @@
+
+<?php
+error_reporting(E_ALL);
+ini_set('display_errors', 1);
+
+$DATABASE_HOST = 'localhost';
+$DATABASE_USER = 'root';
+$DATABASE_PASS = '';
+$DATABASE_NAME = 'afaranew';
+
+$con = mysqli_connect($DATABASE_HOST, $DATABASE_USER, $DATABASE_PASS, $DATABASE_NAME);
+if (mysqli_connect_errno()) {
+    exit('Failed to connect to MySQL: ' . mysqli_connect_error());
+}
+
+$errorMessage = ''; // Variable to store error messages
+$successMessage = ''; // Variable to store success message
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $requiredFields = [
+        'username',
+        'email',
+        'password'
+    ];
+
+    foreach ($requiredFields as $field) {
+        if (!isset($_POST[$field]) || empty($_POST[$field])) {
+            $errorMessage .= "Field '$field' is missing or empty. ";
+        }
+    }
+
+    // Check if username and email are unique
+    $checkExistingQuery = $con->prepare('SELECT COUNT(*) FROM Users WHERE username = ? OR email = ?');
+    $checkExistingQuery->bind_param('ss', $_POST['username'], $_POST['email']);
+    $checkExistingQuery->execute();
+    $checkExistingQuery->bind_result($existingAccountsCount);
+    $checkExistingQuery->fetch();
+    $checkExistingQuery->close();
+
+    if ($existingAccountsCount > 0) {
+        $errorMessage .= "An account with the same username or email already exists.";
+    }
+
+    if ($errorMessage === '') {
+        // Hash the password
+        $hashedPassword = password_hash($_POST['password'], PASSWORD_DEFAULT);
+
+        // Insert user data into the Users table
+        $stmt = $con->prepare('INSERT INTO Users (username, email, password) VALUES (?, ?, ?)');
+        $stmt->bind_param('sss', $_POST['username'], $_POST['email'], $hashedPassword);
+        
+        if ($stmt->execute()) {
+            $successMessage = "Registration successful!";
+        } else {
+            $errorMessage .= 'Registration failed, please try again';
+        }
+
+        $stmt->close();
+    }
+}
+?>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sign Up</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-   
+   <link rel="stylesheet" href="reg.css">
     <link rel="shortcut icon" href="images/logo.jpg">
     <link rel="stylesheet" href="style.css">
 </head>
@@ -25,8 +86,8 @@
                   <li><a href="community.html">Community</a></li>
                  </ul>
                </li>
-            <li><a href="login.html" >Sign In</a></li>
-            <li><a id="contactbtn" href="signUp.html">Sign Up</a></li>
+            <li><a href="login.php" >Sign In</a></li>
+            <li><a id="contactbtn" href="signUp.php">Sign Up</a></li>
           </ul>
         </div>
       </header>
@@ -66,8 +127,8 @@
                      subMenu.style.display = (subMenu.style.display === 'none' || subMenu.style.display === '') ? 'block' : 'none';
                    }
                  </script>
-          <a href="login.html" >Sign In</a>
-            <a href="signUp.html">Sign UP</a>
+          <a href="login.php" >Sign In</a>
+            <a href="signUp.php">Sign UP</a>
         </div>
         <script>
         
@@ -91,67 +152,29 @@
         </script>
     </nav>
     <main>
-        <div id="alert">
-           <div id="container">
-            <div id="color1"></div>
-            <div id="color2"></div>
-        </div> 
-        <div><h2>Website Development in Progress...</h2>
-        <p>Please keep checking</p></div>
-        
-        </div>
-        
+      <div id="form">
+   <div id="f1"><h2>Sign Up</h2></div>
+   <div id="f2">
+     <form action="" method="post">
+      <input type="text" name="username" id="" placeholder="Name">
+       <input type="email" name="email" id="" placeholder="Email"><br>
+       <input type="password" name="password" id="" placeholder="Password"><br>
+       <input type="submit" name="" id="subm" value="Sign Up">
+       <p>Already a Member? <a href="login.php">Sign-in now</a></p>
+       <?php
+        if ($errorMessage !== '') {
+            echo '<div style="color: red;text-align:center">' . $errorMessage . '</div>';
+        }
 
-    </main>
-    <div id="inbox">
-      <h2>Get the best viral stories straight into your inbox!</h2>
-      <a href="signUp.html" id="submit">SIGN UP NOW!</a>
-    </div>
-
-    <div id="bg">
-    <footer>
-      <div>
-       <h3>ABOUT US</h3> 
-       <hr>
-<p>Afara News and Afara TV are online News medium with unbiased reporting.</p>
-
-<p>Discussions are no hold barred.</p>
-
-<p>You have a right to be heard because we bridge the information divide.</p>
-
-<p>Afaranews is owned by <b>HIBERNATION DIGITAL ACADEMY</b></p>
-
- 
+        if ($successMessage !== '') {
+            echo '<div style="color: #08b197;text-align:center">' . $successMessage . '</div>';
+        }
+    ?>
+     </form>
+   </div>
       </div>
-      <div>
-        <h3>FIND US ON FACEBOOK</h3>
-        <hr>
-        <div style="width: 100%;height: 100%;"></div>
-      </div>
-      <div>
-        <h3>ADVERTISE WITH US</h3>
-        <hr>
-        <p>Want to expose your Business to the world?</p>
-         <p>Advertise your business on our platform at reduced price</p>
-         <p>Fill the form to contact us now :</p>
-         <form action="" id="form">
-          <input type="text" name="name" id="" placeholder="Enter Name"><br>
-          <input type="email" name="email" id="" placeholder="Email"><br>
-          <input type="phone" name="phone" id="" placeholder="Phone number"><br>
-          <input type="submit" name="" id="submit">
-         </form>
-      </div>
-     
-    </footer>
-   
-      <div id="last">
-        <a href="#" ><i class="fa fa-facebook-official" style="font-size:24px;color:#ff1b00"></i> </a>
-        <a  href="#" ><i class="fa fa-twitter-square" style="font-size:24px;color:#ff1b00"></i></a>
-        <a  href="#" ><i class="fa fa-instagram" style="font-size:24px;color:#ff1b00"></i></a>
-        <a href="#" ><i class="fa fa-linkedin-square" style="font-size:24px;color:#ff1b00"></i></a>
-     </div>
+       </main>
 
-  </div>
     <script src="script.js"></script>
 </body>
 </html>
