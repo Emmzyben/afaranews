@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $_SESSION['loggedin'] = TRUE;
             $_SESSION['user_id'] = $user_id;
             $_SESSION['username'] = $username;
-            header('Location: index.html');
+            header('Location: index.php');
             exit;
         } else {
             echo 'Incorrect username and/or password!';
@@ -68,14 +68,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
     <div class="div2">
       <ul>
-        <li><a href="index.html">Home </a></li>
+        <li><a href="index.php">Home </a></li>
         <li class="nav-container">
             <span id="hoverer">News Category</span> 
              <ul id="dropdown">
-              <li><a href="politics.html">Politics</a></li> 
-              <li><a href="business.html">Business</a></li> 
-              <li><a href="sports.html">Sports</a></li>
-              <li><a href="community.html">Community</a></li>
+              <li><a href="politics.php">Politics</a></li> 
+              <li><a href="business.php">Business</a></li> 
+              <li><a href="sports.php">Sports</a></li>
+              <li><a href="community.php">Community</a></li>
              </ul>
            </li>
         <li><a href="login.php" >Sign In</a></li>
@@ -101,15 +101,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <nav style="z-index: 1;">
     <div id="mySidenav" class="sidenav">
         <img src="images/logo.png" alt="">
-        <a href="index.html">Home</a>
+        <a href="index.php">Home</a>
         <a class="dropdown-item" onclick="toggleDropdown()" >
             News Category +
                <div class="sub-menu1" style="display: none;transition: 0.5s;background-color: #171718;
                color: #fff;">
-              <a href="politics.html">Politics</a>
-              <a href="business.html">Business</a>
-              <a href="sports.html">Sports</a>
-              <a href="community.html">Community</a>
+              <a href="politics.php">Politics</a>
+              <a href="business.php">Business</a>
+              <a href="sports.php">Sports</a>
+              <a href="community.php">Community</a>
                </div>
              </a>
           
@@ -150,7 +150,7 @@ function openNav() {
   <form action="" method="post">
     <input type="email" name="email" id="" placeholder="Email"><br>
     <input type="password" name="password" id="" placeholder="Password"><br>
-    <a href="forgotpassword.html">Forgot Password?</a><br>
+    <a href="forgotpassword.php">Forgot Password?</a><br>
     <input type="submit" name="" id="subm" value="Sign In">
     <p>Not a Member? <a href="signUp.php">Signup now</a></p>
   </form>
